@@ -1,6 +1,6 @@
 # Workshop Management System
 
-This project is a full-stack web application designed to manage workshops, including registrations, attendance, material requirements, feedback collection, and certificate generation.  
+This project is a full-stack web application designed to manage learning/educational workshops, including registrations, attendance, material requirements, feedback collection, and certificate generation.  
 It aims to streamline the entire workshop lifecycle for both organizers and participants.
 
 ---
