@@ -11,7 +11,7 @@ connectDB();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-const authRoutes = require('./routes/auth');
+const authRoutes = require('./routes/authRoutes');
 app.get('/', (req, res) => res.send({ message: "Workshop Management System" }));
 app.use('/api/auth', authRoutes);
 
