@@ -12,8 +12,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 const authRoutes = require('./routes/authRoutes');
+const userRoutes = require('./routes/userRoutes');
 app.get('/', (req, res) => res.send({ message: "Workshop Management System" }));
 app.use('/api/auth', authRoutes);
+app.use('/api/users', userRoutes);
 
 app.use((err, req, res, next) => {
     console.error(err);
