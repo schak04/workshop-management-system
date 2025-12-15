@@ -19,7 +19,7 @@ const registerForWorkshop = async (req, res) => {
 
 const listRegistrations = async (req, res) => {
     try {
-        const filter = {}; // admin can pass ?workshop=<id> to filter
+        const filter = {}; // optional ?workshop=<id> query filter
         if (req.query.workshop) filter.workshop = req.query.workshop;
         if (req.user.role === 'participant') filter.user = req.user._id;
 
