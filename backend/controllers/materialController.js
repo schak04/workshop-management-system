@@ -3,7 +3,7 @@ const Material = require('../models/Material');
 const addMaterial = async (req, res) => {
     try {
         const {workshop, title, file_url} = req.body;
-        if (!workshop || !file_url) return res.status(400).json({message: "workshop and file_url required"});
+        if (!workshop || !file_url) return res.status(400).json({message: "Workshop and file URL are required for adding material"});
 
         const m = await Material.create({workshop, title, file_url, uploaded_by: req.user._id});
         res.status(201).json(m);
