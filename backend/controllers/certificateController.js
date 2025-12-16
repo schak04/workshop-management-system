@@ -1,0 +1,44 @@
+const Certificate = require('../models/Certificate');
+
+const issueCertificate = async (req, res) => {
+    try {
+        const {workshop, userId, certificate_url} = req.body;
+        if (!workshop || !userId || !certificate_url) return res.status(400).json({message: "Workshop, user ID, and certificate URL are required"});
+        const cert = await Certificate.create({workshop, user: userId, certificate_url});
+        res.status(201).json(cert);
+    }
+    catch (err) {
+        console.error(err);
+        res.status(500).json({message: "Error issuing certificate"});
+    }
+};
+
+const listCertificates = async (req, res) => {
+    try {
+        const filter = {};
+        if (req.query.user) filter.user = req.query.user;
+        if (req.query.workshop) filter.workshop = req.query.workshop;
+        const certs = await Certificate.find(filter).populate('user', 'name email').populate('workshop', 'title date');
+        res.json(certs);
+    }
+    catch (err) {
+        console.error(err);
+        res.status(500).json({message: "Error listing certificates"});
+    }
+};
+
+const downloadCertificate = async (req, res) => {
+    try {
+        const {certificateId} = req.params;
+        const cert = await Certificate.findById(certificateId).populate('user', 'name email');
+        if (!cert) return res.status(404).json({message: "Error 404: Certificate not found"});
+        
+        res.redirect(cert.certificate_url);
+    }
+    catch (err) {
+        console.error(err);
+        res.status(500).json({message: "Error downloading certificate"});
+    }
+};
+
+module.exports = {issueCertificate, listCertificates, downloadCertificate};
