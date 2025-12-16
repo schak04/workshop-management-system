@@ -5,6 +5,6 @@ const {issueCertificate, listCertificates, downloadCertificate} = require('../co
 
 router.post('/', verifyToken, requireRole('admin'), issueCertificate);
 router.get('/', verifyToken, listCertificates);
-router.get('/download/:certificateId', verifyToken, requireRole('participant'), downloadCertificate);
+router.get('/download/:certificateId', verifyToken, downloadCertificate);
 
 module.exports = router;
