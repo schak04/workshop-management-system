@@ -17,6 +17,7 @@ const workshopRoutes = require('./routes/workshopRoutes');
 const materialRoutes = require('./routes/materialRoutes');
 const registrationRoutes = require('./routes/registrationRoutes');
 const attendanceRoutes = require('./routes/attendanceRoutes');
+const feedbackRoutes = require('./routes/feedbackRoutes');
 app.get('/', (req, res) => res.send({ message: "Workshop Management System" }));
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
@@ -24,6 +25,7 @@ app.use('/api/workshops', workshopRoutes);
 app.use('/api/materials', materialRoutes);
 app.use('/api/registration', registrationRoutes);
 app.use('/api/attendance', attendanceRoutes);
+app.use('/api/feedback', feedbackRoutes);
 
 app.use((err, req, res, next) => {
     console.error(err);
