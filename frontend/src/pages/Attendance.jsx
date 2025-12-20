@@ -1,17 +1,32 @@
 import { useEffect, useState } from 'react';
 import api from '../api/axios';
+import { useAuth } from '../context/AuthContext';
 
 export default function Attendance() {
     const [workshops, setWorkshops] = useState([]);
     const [selectedWorkshop, setSelectedWorkshop] = useState('');
     const [registrations, setRegistrations] = useState([]);
     const [attendance, setAttendance] = useState([]);
+    const {user} = useAuth();
 
     useEffect(() => {
-        api.get('/workshops')
-            .then(res => setWorkshops(res.data))
-            .catch(err => console.error(err));
-    }, []);
+        if (!user) return;
+        const fetchWorkshops = async () => {
+            try {
+                let res;
+                if (user.role === 'instructor') {
+                    res = await api.get('/workshops/my');
+                } else {
+                    res = await api.get('/workshops');
+                }
+                setWorkshops(res.data);
+            }
+            catch (err) {
+                console.error(err);
+            }
+        };
+        fetchWorkshops();
+    }, [user]);
 
     useEffect(() => {
         if (!selectedWorkshop) return;
@@ -42,7 +57,7 @@ export default function Attendance() {
                 return [...prev, res.data];
             });
         }
-        catch(err) {
+        catch (err) {
             console.error(err);
             const message = err.response?.data?.message || "Error marking attendance";
             alert(message);

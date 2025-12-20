@@ -50,6 +50,20 @@ const getWorkshop = async (req, res) => {
     }
 };
 
+const getMyWorkshops = async (req, res) => {
+    try {
+        const workshops = await Workshop.find({
+            instructor: req.user.id
+        });
+
+        res.json(workshops);
+    }
+    catch (err) {
+        console.error(err);
+        res.status(500).json({ message: "Error fetching instructor workshops" });
+    }
+};
+
 const getWorkshops = async (req, res) => {
     try {
         const workshops = await Workshop.find().populate('instructor', 'name email role');
@@ -61,4 +75,4 @@ const getWorkshops = async (req, res) => {
     }
 };
 
-module.exports = {createWorkshop, updateWorkshop, deleteWorkshop, getWorkshop, getWorkshops};
+module.exports = {createWorkshop, updateWorkshop, deleteWorkshop, getWorkshop, getMyWorkshops, getWorkshops};
