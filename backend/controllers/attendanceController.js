@@ -7,7 +7,7 @@ const markAttendance = async (req, res) => {
         const {registrationId, attended} = req.body;
         if (!registrationId) res.status(400).json({message: "Can't mark attendance without a valid registration ID"});
         
-        const reg = await Registration.findById(registrationId).populate('workshop');        
+        const reg = await Registration.findById(registrationId).populate('workshop');
         if (!reg) return res.status(404).json({message: "Error 404: Registration not found"});
         if (req.user.role === 'instructor') {
             if (reg.workshop.instructor.toString() !== req.user.id) {
