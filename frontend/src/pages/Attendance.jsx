@@ -1,4 +1,4 @@
-import {useEffect, useState} from 'react';
+import { useEffect, useState } from 'react';
 import api from '../api/axios';
 
 export default function Attendance() {
@@ -24,7 +24,7 @@ export default function Attendance() {
     }, [selectedWorkshop]);
 
     const getAttendanceForReg = (regId) => {
-        return attendance.find(a => a.registration?._id === regId);
+        return attendance.find(a => a.registration?._id === regId || a.registration === regId);
     };
 
     const toggleAttendance = async (regId, current) => {
@@ -92,15 +92,18 @@ export default function Attendance() {
                                     <td className='border p-2'>{reg.user.name}</td>
                                     <td className='border p-2'>{reg.user.email}</td>
                                     <td className='border p-2'>
-                                        {attended ? 'Present' : 'Absent'}
+                                        {attended ? "Present" : "Absent"}
                                     </td>
-                                    <td className='border p-2'>
-                                        <button
-                                            className='border px-3 py-1 rounded'
-                                            onClick={() => toggleAttendance(reg._id, attended)}
-                                        >
-                                            Mark {attended ? "Absent" : "Present"}
-                                        </button>
+                                    <td className='border p-2 text-center'>
+                                        <div className='flex justify-center'>
+                                            <button
+                                                className={`px-4 py-1.5 rounded-md font-medium transition-all duration-150 ease-in-out active:scale-[0.98] shadow-sm hover:shadow-md
+                                                ${attended ? 'bg-sky-400 hover:bg-sky-500 text-white' : 'bg-amber-400 hover:bg-amber-500 text-black'}`}
+                                                onClick={() => toggleAttendance(reg._id, attended)}
+                                            >
+                                                Mark {attended ? "Absent" : "Present"}
+                                            </button>
+                                        </div>
                                     </td>
                                 </tr>
                             );
