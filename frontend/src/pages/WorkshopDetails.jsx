@@ -77,17 +77,17 @@ export default function WorkshopDetails() {
             )}
 
             {user?.role === 'participant' && (
-                <div className="mt-4">
+                <div className='mt-4'>
                     <button
                         onClick={handleRegister}
                         disabled={registering}
-                        className="border px-4 py-2 rounded hover:bg-gray-100 disabled:opacity-50"
+                        className='border px-4 py-2 rounded hover:bg-green-600 disabled:opacity-50'
                     >
-                        {registering ? 'Registering...' : 'Register for Workshop'}
+                        {registering ? "Registering..." : "Register for Workshop"}
                     </button>
 
                     {message && (
-                        <p className="mt-2 text-sm text-blue-600">{message}</p>
+                        <p className='mt-2 text-sm text-blue-600'>{message}</p>
                     )}
                 </div>
             )}
