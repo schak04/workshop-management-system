@@ -1,6 +1,15 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
+const validator = require('validator');
+
+const isValidEmail = (email) => {
+    return validator.isEmail(email);
+}
+
+const isValidPassword = (password) => {
+    return typeof password === 'string' && password.length >= 6;
+}
 
 const signup = async (req, res) => {
     try {
@@ -8,13 +17,19 @@ const signup = async (req, res) => {
         if (!name || !email || !password) {
             return res.status(400).json({message: "Name, email, and password are all required fields"});
         }
-        const userExists = await User.findOne({email});
+
+        const normalizedEmail = email.toLowerCase().trim();
+        if (!isValidEmail(normalizedEmail)) return res.status(400).json({message: "Invalid email address!"});
+        
+        if (!isValidPassword(password)) return res.status(400).json({message: "Password should be atleast 6 characters long."});
+
+        const userExists = await User.findOne({email: normalizedEmail});
         if (userExists) return res.status(400).json({message: "Email already registered"});
 
         const allowedRoles = ['participant', 'instructor'];
         const finalRole = allowedRoles.includes(role) ? role : 'participant';
         const hashedPassword = await bcrypt.hash(password, 10);
-        const user = await User.create({name, email, password: hashedPassword, role: finalRole});
+        const user = await User.create({name, email: normalizedEmail, password: hashedPassword, role: finalRole});
         const token = jwt.sign({id: user._id}, process.env.JWT_SECRET, {expiresIn: process.env.JWT_EXPIRES_IN || '7d'});
         
         res.status(201).json({message: "User created successfully", user:{id:user._id, name: user.name, email: user.email, role: user.role}, token});
@@ -29,7 +44,8 @@ const login = async (req, res) => {
     try {
         const {email, password} = req.body;
         if (!email || !password) return res.status(400).json({message: "Email and password are both required"});
-        const user = await User.findOne({email});
+        const normalizedEmail = email.toLowerCase().trim();
+        const user = await User.findOne({ email: normalizedEmail });
         if (!user) return res.status(400).json({message: "Invalid credentials"});
 
         const passwordOkay = await bcrypt.compare(password, user.password);
